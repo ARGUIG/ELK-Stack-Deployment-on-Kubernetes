@@ -1,0 +1,29 @@
+## logstash.yml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-configmap
+  namespace: elk
+data:
+  logstash.yml: |
+    path.config: /usr/share/logstash/pipeline
+
+  logstash.conf: |
+    input {
+      jdbc {
+        jdbc_connection_string => "jdbc:sqlserver://172.19.110.6:1433;databaseName=Bam-Bo-Recette"
+        jdbc_user => "elasticUser"
+        jdbc_password => "Admin2020Admin2021"
+        jdbc_driver_class => "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+        statement => "SELECT * FROM dbo.ref_Customer"
+        schedule => "* * * * *"
+      }
+    }
+
+    output {
+      elasticsearch {
+        hosts => ["http://elasticsearch:9200"]
+        index => "sqlserver_customer_data"
+        document_id => "%{id}"
+      }
+    }

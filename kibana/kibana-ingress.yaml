@@ -1,0 +1,19 @@
+##kibana-ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kibana-ingress
+  namespace: elk
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: kibana.barid.ma
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: kibana
+            port:
+              number: 5601

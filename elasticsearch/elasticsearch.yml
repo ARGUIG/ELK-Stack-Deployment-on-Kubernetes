@@ -1,0 +1,14 @@
+##elasticsearch.yml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elasticsearch-config
+  namespace: elk
+data:
+  elasticsearch.yml: |
+    cluster.name: k8s-logs
+    node.name: ${HOSTNAME}
+    discovery.seed_hosts: ["es-cluster-0.elasticsearch.elk.svc.cluster.local", "es-cluster-1.elasticsearch.elk.svc.cluster.local", "es-cluster-2.elasticsearch.elk.svc.cluster.local", "es-cluster-3.elasticsearch.elk.svc.cluster.local"]
+    cluster.initial_master_nodes: ["es-cluster-0", "es-cluster-1", "es-cluster-2", "es-cluster-3"]
+    network.host: 0.0.0.0
+    node.max_local_storage_nodes: 4
